@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <meta name="viewport" content="user-scalable=no,initial-scale=1, 
+maximum-scale=1,minimum-scale=1, width=device-width" />
+        <title>PhoneGap App</title>
+        <script src="js/jquery-1.11.3"></script>   <!-jquery-1.10.2.min is the name of my file>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript">
+ 
+            var fileObject;
+            document.addEventListener("deviceready", onDeviceReady, true);
+            function onDeviceReady() 
+           {
+              window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
+            }
+            
+            function onFileSystemSuccess(fileSystem) {
+                fileSystem.root.getFile("ALEXANDRE.txt",
+                {create: true, exclusive: false},
+                gotFileEntry, fail);
+              }
+         	function gotFileEntry(fileEntry) {
+                fileObject = fileEntry;
+                $('#saveFile_btn').on('click', function() {
+                    saveFileContent();
+                });
+            }
+ 
+function saveFileContent() {
+                fileObject.createWriter(gotFileWriter, fail);
+            }
+            
+            function gotFileWriter(writer) {
+                var myText = document.getElementById('my_text').value;
+                writer.write(myText);
+                writer.onwriteend = function(evt) {
+                $('#message').html('<p>File contents have been written.<br /><strong>File path:</strong> ' + fileObject.fullPath + '</p>');
+                    var reader = new FileReader();
+                    reader.readAsText(fileObject);
+                    reader.onload = function(evt) {
+                        $('#contents').html('<strong>File contents:</strong> <br />'
+                            + evt.target.result);
+                    };
+                };
+            }
+ 
+ 
+function fail(error)
+ {
+              	  alert(error.code);
+            }
+            </script>
+    </head>
+    <body>
+        	<input type="text" id="my_text" />
+        	<input type="button" id="saveFile_btn"
+               value="Save" />
+        	<div id="message"></div>
+        	<div id="contents"></div>
+    </body>
+</html>
