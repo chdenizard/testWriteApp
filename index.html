@@ -16,7 +16,7 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
             }
             
             function onFileSystemSuccess(fileSystem) {
-                alert ("Criando arquivo no fileSystem vs.2");
+                alert ("Criando arquivo no fileSystem vs.3");
                 fileSystem.root.getFile("readme.txt",
                 {create: true, exclusive: false},
                 gotFileEntry, fail);
@@ -26,8 +26,25 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
                 $('#saveFile_btn').on('click', function() {
                     saveFileContent();
                 });
+                $('#readFile_btn').on('click', function() {
+                    readFileContent(fileEntry);
+                });
             }
  
+function readFileContent(fileEntry) {
+    
+    fileEntry.file(function(file) {
+        var reader = new FileReader();
+        alert ("Lendo...");
+        reader.onloadend = function(e) {
+            alert("Text is: "+this.result);
+            $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
+        }
+
+        reader.readAsText(file);
+    });
+}
+
 function saveFileContent() {
                 fileObject.createWriter(gotFileWriter, fail);
             }
@@ -37,13 +54,6 @@ function saveFileContent() {
                 writer.write(myText);
                 writer.onwriteend = function(evt) {
                 $('#message').html('<p>File contents have been written.<br /><strong>File path:</strong> ' + fileObject.fullPath + '</p>');
-                    var reader = new FileReader();
-                    reader.readAsText(fileObject);
-                    reader.onloadend = function(evt) {
-                        alert ("Lendo arquivo..."+this.result);
-                        $('#contents').html('<strong>File contents:</strong> <br />'
-                            + this.result);
-                    };
                 };
             }
  
@@ -58,6 +68,8 @@ function fail(error)
         	<input type="text" id="my_text" />
         	<input type="button" id="saveFile_btn"
                value="Save" />
+            <input type="button" id="readFile_btn"
+               value="Read" />
         	<div id="message"></div>
         	<div id="contents"></div>
     </body>
