@@ -6,11 +6,12 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
         <script src="js/jquery-1.11.3.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
- 
+
             var fileObject;
             document.addEventListener("deviceready", onDeviceReady, true);
             function onDeviceReady() 
            {
+              
               window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
             }
             
@@ -38,7 +39,7 @@ function saveFileContent() {
                 $('#message').html('<p>File contents have been written.<br /><strong>File path:</strong> ' + fileObject.fullPath + '</p>');
                     var reader = new FileReader();
                     reader.readAsText(fileObject);
-                    reader.onload = function(evt) {
+                    reader.onloadend = function(evt) {
                         $('#contents').html('<strong>File contents:</strong> <br />'
                             + evt.target.result);
                     };
