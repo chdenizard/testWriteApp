@@ -4,6 +4,7 @@
 maximum-scale=1,minimum-scale=1, width=device-width" />
         <title>PhoneGap App</title>
         <script src="js/jquery-1.11.3.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
  
             var fileObject;
@@ -14,6 +15,7 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
             }
             
             function onFileSystemSuccess(fileSystem) {
+                alert ("Criando arquivo no fileSystem");
                 fileSystem.root.getFile("readme.txt",
                 {create: true, exclusive: false},
                 gotFileEntry, fail);
