@@ -16,7 +16,7 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
             }
             
             function onFileSystemSuccess(fileSystem) {
-                alert ("Criando arquivo no fileSystem");
+                alert ("Criando arquivo no fileSystem vs.2");
                 fileSystem.root.getFile("readme.txt",
                 {create: true, exclusive: false},
                 gotFileEntry, fail);
@@ -40,8 +40,9 @@ function saveFileContent() {
                     var reader = new FileReader();
                     reader.readAsText(fileObject);
                     reader.onloadend = function(evt) {
+                        alert ("Lendo arquivo..."+this.result);
                         $('#contents').html('<strong>File contents:</strong> <br />'
-                            + evt.target.result);
+                            + this.result);
                     };
                 };
             }
