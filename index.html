@@ -11,7 +11,7 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
             document.addEventListener("deviceready", onDeviceReady, true);
             function onDeviceReady() 
            {
-              
+              alert ("Device UUID:"+device.uuid);
               window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
             }
             
