@@ -3,8 +3,7 @@
         <meta name="viewport" content="user-scalable=no,initial-scale=1, 
 maximum-scale=1,minimum-scale=1, width=device-width" />
         <title>PhoneGap App</title>
-        <script src="js/jquery-1.11.3"></script>   <!-jquery-1.10.2.min is the name of my file>
-        <script type="text/javascript" src="cordova.js"></script>
+        <script src="js/jquery-1.11.3.js"></script>
         <script type="text/javascript">
  
             var fileObject;
@@ -15,7 +14,7 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
             }
             
             function onFileSystemSuccess(fileSystem) {
-                fileSystem.root.getFile("ALEXANDRE.txt",
+                fileSystem.root.getFile("readme.txt",
                 {create: true, exclusive: false},
                 gotFileEntry, fail);
               }
