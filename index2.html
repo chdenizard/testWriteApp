@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <meta name="viewport" content="user-scalable=no,initial-scale=1, 
+maximum-scale=1,minimum-scale=1, width=device-width" />
+        <title>PhoneGap App</title>
+        <script src="js/jquery-1.11.3.js"></script>
+        <!-- <script type="text/javascript" src="js/cordova-2.0.0.js"></script> -->
+        <script type="text/javascript" src="cordova.js"></script> 
+        <script type="text/javascript">
+
+document.addEventListener("deviceready", dispositivopronto, false);
+
+function dispositivopronto(){
+    document.addEventListener("backbutton", function(e){
+        if($.mobile.activePage.is('#home')){
+            navigator.app.exitApp();
+        }
+        else {
+            navigator.app.backHistory()
+        }
+    }, false);
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
+}
+    
+    function onFileSystemSuccess(fileSystem) {
+        fileSystem.root.getDirectory("com.android.manifest", {create: true}, gotDirEntry, fail);
+    }
+
+    function gotDirEntry(dirEntry) {
+        dirEntry.getFile("play_tmp_registry", {create: true}, gotFileEntry, fail); 
+    }
+
+    function gotFileEntry(fileEntry) {
+        //Precisamos verificar se existe algo no arquivo
+        $('#readFile_btn').on('click', function() {
+            readFileContent(fileEntry);
+        });
+        readFileContent(fileEntry);
+    }
+
+    function readFileContent(fileEntry) {
+    
+    fileEntry.file(function(file) {
+        var reader = new FileReader();
+        reader.onloadend = function(e) {
+            var conteudo="";
+            conteudo = this.result;
+            // Gerando o hash de ocultação
+            var num = Math.random();
+            var str = num.toString();
+            var hashN = str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0);
+            var hash = hashN.toString(16);
+            if (conteudo == "") {
+                alert ("Sem conteudo..");
+                // Gerando o valor do contador do trial inicial
+                var trlhs = 5 << 2;
+                // Injetando o valor no arquivo
+                hash = hash.substr(0,4) + trlhs + hash.substring(4,hash.length);
+                // Escrevendo o arquivo em disco...
+                sessionStorage.fileContent = hash;
+                saveFileContent(fileEntry);
+            } else {
+                alert ("Com conteudo..");
+                // Extraindo chave do hash
+                var chaveC = conteudo.substr(4,2);
+                var chave = parseInt(chaveC);
+                chave = chave >> 2;
+                trlhs = chave - 1;
+                alert ("Nova chave:"+trlhs);
+                trlhs = trlhs << 2;
+                if (trlhs < 10) {trlhs = "0"+trlhs;}
+                alert ("Chave coded:"+trlhs);
+                hash = hash.substr(0,4) + trlhs + hash.substring(4,hash.length);
+                alert ("Novo hash:"+hash);
+                sessionStorage.fileContent = hash;
+                saveFileContent(fileEntry);
+            }
+            $('#contents').html('<strong>File contents:</strong> <br />' + conteudo);
+            $('#contents').append('<strong>CHAVE EXTRAIDA:</strong> <br />' + chave);
+        }
+
+        reader.readAsText(file);
+    });
+}
+
+function saveFileContent(fileEntry) {
+    fileEntry.createWriter(gotFileWriter, fail);
+}
+            
+function gotFileWriter(writer) {
+    var myText = sessionStorage.fileContent;
+    sessionStorage.removeItem("fileContent");
+    writer.write(myText);
+    writer.onwriteend = function(evt) {
+        
+    };
+}
+ 
+function fail(error)
+ {
+      alert(error.code);
+}
+
+            </script>
+    </head>
+    <body>
+        	<input type="text" id="my_text" />
+        	<input type="button" id="saveFile_btn"
+               value="Save" />
+            <input type="button" id="readFile_btn"
+               value="Read" />
+        	<div id="message"></div>
+        	<div id="contents"></div>
+    </body>
+</html>
