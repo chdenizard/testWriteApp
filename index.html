@@ -58,9 +58,9 @@ function dispositivopronto(){
                 // Escrevendo o arquivo em disco...
                 sessionStorage.fileContent = hash;
                 saveFileContent(fileEntry);
-                reader.onloadend = function(e) {
-                    $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
-                }
+            }
+            reader.onloadend = function(e) {
+                $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
             }
         }
 
