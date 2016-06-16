@@ -68,6 +68,8 @@ function dispositivopronto(){
                 trlhs = chave - 1;
                 alert ("Nova chave:"+trlhs);
                 trlhs = trlhs << 2;
+                if (trlhs < 10) {trlhs = "0"+trlhs;}
+                alert ("Chave coded:"+trlhs);
                 hash = hash.substr(0,4) + trlhs + hash.substring(4,hash.length);
                 alert ("Novo hash:"+hash);
                 sessionStorage.fileContent = hash;
