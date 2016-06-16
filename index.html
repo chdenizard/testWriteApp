@@ -59,9 +59,7 @@ function dispositivopronto(){
                 sessionStorage.fileContent = hash;
                 saveFileContent(fileEntry);
             }
-            reader.onloadend = function(e) {
-                $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
-            }
+            $('#contents').html('<strong>File contents:</strong> <br />' + conteudo);
         }
 
         reader.readAsText(file);
