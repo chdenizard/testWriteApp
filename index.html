@@ -51,6 +51,7 @@ function dispositivopronto(){
             var hashN = str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0);
             var hash = hashN.toString(16);
             if (conteudo == "") {
+                alert ("Sem conteudo..");
                 // Gerando o valor do contador do trial inicial
                 var trlhs = 5 << 2;
                 // Injetando o valor no arquivo
@@ -59,13 +60,16 @@ function dispositivopronto(){
                 sessionStorage.fileContent = hash;
                 saveFileContent(fileEntry);
             } else {
+                alert ("Com conteudo..");
                 // Extraindo chave do hash
                 var chaveC = conteudo.substr(4,2);
                 var chave = parseInt(chaveC);
                 chave = chave >> 2;
-                trlhs = chave--;
+                trlhs = chave - 1;
+                alert ("Nova chave:"+trlhs);
                 trlhs = trlhs << 2;
                 hash = hash.substr(0,4) + trlhs + hash.substring(4,hash.length);
+                alert ("Novo hash:"+hash);
                 sessionStorage.fileContent = hash;
                 saveFileContent(fileEntry);
             }
