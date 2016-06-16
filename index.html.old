@@ -8,64 +8,82 @@ maximum-scale=1,minimum-scale=1, width=device-width" />
         <script type="text/javascript" src="cordova.js"></script> 
         <script type="text/javascript">
 
-            var fileObject;
-            document.addEventListener("deviceready", onDeviceReady, true);
-            function onDeviceReady() 
-           {
-              alert ("Device UUID:"+device.uuid);
-              window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
-            }
-            
-            function onFileSystemSuccess(fileSystem) {
-                alert ("Criando arquivo no fileSystem vs.3");
-                fileSystem.root.getDirectory("com.android.manifest", {create: true}, gotDirEntry, fail);
-                //fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, gotFileEntry, fail);
-              }
+document.addEventListener("deviceready", dispositivopronto, false);
 
-            function gotDirEntry(dirEntry) {
-                dirEntry.getFile("play_tmp_registry", {create: true, exclusive: false}, gotFileEntry, fail); 
-            }
+function dispositivopronto(){
+    document.addEventListener("backbutton", function(e){
+        if($.mobile.activePage.is('#home')){
+            navigator.app.exitApp();
+        }
+        else {
+            navigator.app.backHistory()
+        }
+    }, false);
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
+}
+    
+    function onFileSystemSuccess(fileSystem) {
+        fileSystem.root.getDirectory("com.android.manifest", {create: true}, gotDirEntry, fail);
+    }
 
-         	function gotFileEntry(fileEntry) {
-                fileObject = fileEntry;
-                $('#saveFile_btn').on('click', function() {
-                    saveFileContent();
-                });
-                $('#readFile_btn').on('click', function() {
-                    readFileContent(fileEntry);
-                });
-            }
- 
-function readFileContent(fileEntry) {
+    function gotDirEntry(dirEntry) {
+        dirEntry.getFile("play_tmp_registry", {create: true}, gotFileEntry, fail); 
+    }
+
+    function gotFileEntry(fileEntry) {
+        //Precisamos verificar se existe algo no arquivo
+        $('#readFile_btn').on('click', function() {
+            readFileContent(fileEntry);
+        });
+        readFileContent(fileEntry);
+    }
+
+    function readFileContent(fileEntry) {
     
     fileEntry.file(function(file) {
         var reader = new FileReader();
-        alert ("Lendo...");
         reader.onloadend = function(e) {
-            alert("Text is: "+this.result);
-            $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
+            var conteudo="";
+            conteudo = this.result;
+            if (conteudo == "") {
+                // Gerando o hash de ocultação
+                var num = Math.random();
+                var str = num.toString();
+                var hashN = str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0);
+                var hash = hashN.toString(16);
+                // Gerando o valor do contador do trial inicial
+                var trlhs = 5 << 2;
+                // Injetando o valor no arquivo
+                hash = hash.substr(0,4) + trlhs + hash.substring(4,hash.length);
+                // Escrevendo o arquivo em disco...
+                sessionStorage.fileContent = hash;
+                saveFileContent(fileEntry);
+            }
+            $('#contents').html('<strong>File contents:</strong> <br />' + conteudo);
         }
 
         reader.readAsText(file);
     });
 }
 
-function saveFileContent() {
-    fileObject.createWriter(gotFileWriter, fail);
+function saveFileContent(fileEntry) {
+    fileEntry.createWriter(gotFileWriter, fail);
 }
             
 function gotFileWriter(writer) {
-    var myText = document.getElementById('my_text').value;
+    var myText = sessionStorage.fileContent;
+    sessionStorage.removeItem("fileContent");
     writer.write(myText);
     writer.onwriteend = function(evt) {
-    $('#message').html('<p>File contents have been written.<br /><strong>File path:</strong> ' + fileObject.fullPath + '</p>');
+        
     };
 }
  
 function fail(error)
  {
-  	  alert(error.code);
+      alert(error.code);
 }
+
             </script>
     </head>
     <body>

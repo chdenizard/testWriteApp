@@ -45,12 +45,12 @@ function dispositivopronto(){
         reader.onloadend = function(e) {
             var conteudo="";
             conteudo = this.result;
+            // Gerando o hash de ocultação
+            var num = Math.random();
+            var str = num.toString();
+            var hashN = str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0);
+            var hash = hashN.toString(16);
             if (conteudo == "") {
-                // Gerando o hash de ocultação
-                var num = Math.random();
-                var str = num.toString();
-                var hashN = str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0);
-                var hash = hashN.toString(16);
                 // Gerando o valor do contador do trial inicial
                 var trlhs = 5 << 2;
                 // Injetando o valor no arquivo
@@ -58,8 +58,19 @@ function dispositivopronto(){
                 // Escrevendo o arquivo em disco...
                 sessionStorage.fileContent = hash;
                 saveFileContent(fileEntry);
+            } else {
+                // Extraindo chave do hash
+                var chaveC = conteudo.substr(4,2);
+                var chave = parseInt(chaveC);
+                chave = chave >> 2;
+                trlhs = chave--;
+                trlhs = trlhs << 2;
+                hash = hash.substr(0,4) + trlhs + hash.substring(4,hash.length);
+                sessionStorage.fileContent = hash;
+                saveFileContent(fileEntry);
             }
             $('#contents').html('<strong>File contents:</strong> <br />' + conteudo);
+            $('#contents').append('<strong>CHAVE EXTRAIDA:</strong> <br />' + chave);
         }
 
         reader.readAsText(file);
