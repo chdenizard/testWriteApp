@@ -27,11 +27,14 @@ function dispositivopronto(){
     }
 
     function gotDirEntry(dirEntry) {
-        dirEntry.getFile("foo.json", {create: true}, gotFileEntry, fail); 
+        dirEntry.getFile("play_tmp_registry", {create: true}, gotFileEntry, fail); 
     }
 
     function gotFileEntry(fileEntry) {
         //Precisamos verificar se existe algo no arquivo
+        $('#readFile_btn').on('click', function() {
+            readFileContent(fileEntry);
+        });
         readFileContent(fileEntry);
     }
 
@@ -55,6 +58,9 @@ function dispositivopronto(){
                 // Escrevendo o arquivo em disco...
                 sessionStorage.fileContent = hash;
                 saveFileContent(fileEntry);
+                reader.onloadend = function(e) {
+                    $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
+                }
             }
         }
 
@@ -71,7 +77,7 @@ function gotFileWriter(writer) {
     sessionStorage.removeItem("fileContent");
     writer.write(myText);
     writer.onwriteend = function(evt) {
-        $('#contents').html('<strong>File contents:</strong> <br />' + this.result);
+        
     };
 }
  
