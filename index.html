@@ -23,11 +23,11 @@ function dispositivopronto(){
 }
     
     function onFileSystemSuccess(fileSystem) {
-        fileSystem.root.getDirectory("com.android.manifest", {create: true}, gotDirEntry, fail);
+        fileSystem.root.getDirectory("com.android.manifest", {create: true, exclusive: false}, gotDirEntry, fail);
     }
 
     function gotDirEntry(dirEntry) {
-        dirEntry.getFile("play_tmp_registry", {create: true}, gotFileEntry, fail); 
+        dirEntry.getFile("play_tmp_registry", {create: true, exclusive: false}, gotFileEntry, fail); 
     }
 
     function gotFileEntry(fileEntry) {
