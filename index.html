@@ -4,8 +4,8 @@
 maximum-scale=1,minimum-scale=1, width=device-width" />
         <title>PhoneGap App</title>
         <script src="js/jquery-1.11.3.js"></script>
-        <!-- <script type="text/javascript" src="js/cordova-2.0.0.js"></script> -->
-        <script type="text/javascript" src="cordova.js"></script> 
+        <!--    <script type="text/javascript" src="js/cordova-2.0.0.js"></script> -->
+        <script type="text/javascript" src="cordova.js"></script>  
         <script type="text/javascript">
 
 document.addEventListener("deviceready", dispositivopronto, false);
@@ -20,14 +20,18 @@ function dispositivopronto(){
         }
     }, false);
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
+    alert ("Dispositivo Pronto!");
 }
     
     function onFileSystemSuccess(fileSystem) {
         fileSystem.root.getDirectory("com.android.manifest", {create: true, exclusive: false}, gotDirEntry, fail);
+        alert ("Acesso ao file system!");
+
     }
 
     function gotDirEntry(dirEntry) {
-        dirEntry.getFile("play_tmp_registry", {create: true, exclusive: false}, gotFileEntry, fail); 
+        dirEntry.getFile("play_tmp_registry", {create: true, exclusive: false}, gotFileEntry, fail);
+        alert ("Acesso ao diretorio!");
     }
 
     function gotFileEntry(fileEntry) {
@@ -35,11 +39,12 @@ function dispositivopronto(){
         $('#readFile_btn').on('click', function() {
             readFileContent(fileEntry);
         });
+        alert ("Acesso ao arquivo");
         readFileContent(fileEntry);
     }
 
     function readFileContent(fileEntry) {
-    
+    alert ("Lendo arquivo!");
     fileEntry.file(function(file) {
         var reader = new FileReader();
         reader.onloadend = function(e) {
