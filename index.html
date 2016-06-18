@@ -4,14 +4,16 @@
 maximum-scale=1,minimum-scale=1, width=device-width" />
         <title>PhoneGap App</title>
         <script src="js/jquery-1.11.3.js"></script>
-        <!--    <script type="text/javascript" src="js/cordova-2.0.0.js"></script> -->
+        <!-- <script type="text/javascript" src="js/cordova-2.0.0.js"></script> -->
         <script type="text/javascript" src="cordova.js"></script>  
         <script type="text/javascript">
 
 document.addEventListener("deviceready", dispositivopronto, false);
 
 function dispositivopronto(){
-    document.addEventListener("backbutton", function(e){
+    alert ("Device ID:"+device.uuid);
+}
+  /*  document.addEventListener("backbutton", function(e){
         if($.mobile.activePage.is('#home')){
             navigator.app.exitApp();
         }
@@ -106,7 +108,7 @@ function gotFileWriter(writer) {
 function fail(error)
  {
       alert(error.code);
-}
+} */
 
             </script>
     </head>
