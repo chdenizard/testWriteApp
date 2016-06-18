@@ -19,6 +19,8 @@ function dispositivopronto(){
             navigator.app.backHistory()
         }
     }, false);
+    
+    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
     alert ("Dispositivo Pronto!");
 }
