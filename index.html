@@ -13,7 +13,7 @@ document.addEventListener("deviceready", dispositivopronto, false);
 function dispositivopronto(){
     alert ("Device ID:"+device.uuid);
 }
-  /*  document.addEventListener("backbutton", function(e){
+    document.addEventListener("backbutton", function(e){
         if($.mobile.activePage.is('#home')){
             navigator.app.exitApp();
         }
@@ -23,7 +23,7 @@ function dispositivopronto(){
     }, false);
     
     window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,onFileSystemSuccess, fail);
+    window.requestFileSystem(window.PERSISTENT, 0,onFileSystemSuccess, fail);
     alert ("Dispositivo Pronto!");
 }
     
@@ -108,7 +108,7 @@ function gotFileWriter(writer) {
 function fail(error)
  {
       alert(error.code);
-} */
+} 
 
             </script>
     </head>
